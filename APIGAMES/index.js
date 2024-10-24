@@ -28,6 +28,20 @@ var DB = {
             year: 2022,
             price: 190
         }
+    ],
+    users: [
+        {
+            id: 1,
+            name: "Thiago Mattos",
+            email: "thiago@gmail.com",
+            password: "123"
+        },
+        {
+            id:20,
+            name: "Guilherme Santos",
+            email: "guilherme@gmail.com",
+            password: "321"
+        }
     ]
 }
 
@@ -115,7 +129,37 @@ app.put("/game/:id", (req,res)=>{
             res.sendStatus(404);
         }
     }
-})
+});
+
+app.post("/auth",(req, res) =>{
+
+    var {email,password} = req.body;
+
+    if(email != undefined){
+
+        var user = DB.users.find(u => u.email == email);
+
+        if(user != undefined){
+
+            if(user.password == password){
+                res.status(200);
+                res.json({token: "false token"});
+            }else{
+                res.status(401);
+                res.json({err: "invalid credentials"});
+            }
+
+        } else{
+            res.status(404);
+            res.json({err: "invalid email"});
+        }
+
+    } else{
+        res.status(400);
+        res.json({err: "invalid email"});
+    }
+
+});
 
 app.listen(45678,()=>{
     console.log("api running");
