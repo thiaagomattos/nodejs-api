@@ -4,15 +4,15 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
+
 const JWTSecret = "dawpdkwapddmkçflgmçlkawekjçdma";
 
 app.use(cors());
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+
 function auth(req,res,next){
-    
     const authToken = req.headers['authorization'];
 
     if(authToken != undefined){
@@ -25,6 +25,7 @@ function auth(req,res,next){
                 res.status(401);
                 res.json({err: "invalid token"});
             } else{
+                
                 req.token = token;
                 req.loggedUser = {id: data.id, email: data.email};
                 next();
@@ -76,7 +77,7 @@ var DB = {
 
 app.get("/games",auth,(req,res)=>{
     res.statusCode = 200;
-    res.json({user: req.loggedUser, games: DB.games});
+    res.json(DB.games);
 });
 
 app.get("/game/:id",auth,(req,res)=>{
